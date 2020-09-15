@@ -1,0 +1,8 @@
+* {
+  font-size: larger;
+  margin: 1em;
+}
+
+form > * {
+  display: block;
+}
