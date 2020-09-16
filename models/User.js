@@ -15,7 +15,6 @@ const userSchema = new mongoose.Schema({
   google: Boolean,
 });
 
-// HASH PASSWORD BEFORE SAVING TO DB
 userSchema.pre("save", async function (next) {
   const user = this;
   const salt = await bcrypt.genSalt();
@@ -23,7 +22,6 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// COMPARE PASSWORD BEFORE LOGGING IN
 userSchema.statics.login = async function (email, password) {
   const user = await this.findOne({ email });
   if (user) {

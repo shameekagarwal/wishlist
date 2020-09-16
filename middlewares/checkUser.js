@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 const checkUser = (req, res, next) => {
-  const token = req.cookies.jwt;
+  const token = req.body.jwt;
   if (token) {
     jwt.verify(token, process.env.JWTSECRET, async (err, decodedtoken) => {
       if (!err) {
@@ -11,8 +11,7 @@ const checkUser = (req, res, next) => {
       }
     });
   } else {
-    // UNAUTHENTICATED ACCESS TO WISHLIST / ADD
-    res.redirect("/login");
+    res.json({ error: "authentication failed" });
   }
 };
 
