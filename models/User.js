@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema({
   email: String,
@@ -9,16 +10,16 @@ const userSchema = new mongoose.Schema({
     {
       title: String,
       description: String,
-      link: String,
     },
   ],
-  google: Boolean,
+  shareablelink: String,
 });
 
 userSchema.pre("save", async function (next) {
   const user = this;
   const salt = await bcrypt.genSalt();
   user.password = await bcrypt.hash(user.password, salt);
+  user.shareablelink = user._id + crypto.randomBytes(20).toString("hex");
   next();
 });
 

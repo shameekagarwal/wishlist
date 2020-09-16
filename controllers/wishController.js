@@ -3,20 +3,31 @@ const postWish = async (req, res) => {
     const { title, description, user } = req.body;
     user.wishlist.push({ title, description });
     await user.save();
-    res.json({ wishes: user.wishlist });
+    res.json({ success: true });
   } catch (e) {
-    res.json({ error: "adding wish failed" });
+    res.json({ success: false, error: "adding wish failed" });
   }
 };
 
-const getWishes = async (req, res) => {
+const deleteWish = async (req, res) => {
+  try {
+    const { user, wishid } = req.body;
+    user.wishlist = user.wishlist.filter((wish) => wish._id != wishid);
+    await user.save();
+    res.json({ success: true });
+  } catch (e) {
+    res.json({ success: false, error: "deleting wish failed" });
+  }
+};
+
+const getAllWishes = async (req, res) => {
   try {
     const { user } = req.body;
     const { wishlist } = user;
-    res.json({ wishes: wishlist });
+    res.json({ success: true, wishes: wishlist });
   } catch (e) {
-    res.json({ error: "getting wishlist failed" });
+    res.json({ success: false, error: "getting wishlist(private) failed" });
   }
 };
 
-module.exports = { postWish, getWishes };
+module.exports = { postWish, deleteWish, getAllWishes };

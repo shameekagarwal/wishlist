@@ -10,14 +10,18 @@ const createToken = (id) => {
 const postLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
+    const exists = await User.findOne({ email });
+    if (!exists) {
+      return res.json({ success: false, error: "email doesnt exist" });
+    }
     const user = await User.login(email, password);
     if (!user) {
-      return res.json({ error: "email doesnt exist" });
+      return res.json({ success: false, error: "incorrect password" });
     }
     const token = createToken(user._id);
-    res.json({ token, user });
+    res.json({ success: true, token, user });
   } catch (e) {
-    res.json({ error: "login failed" });
+    res.json({ success: false, error: "login failed" });
   }
 };
 
@@ -26,13 +30,12 @@ const postSignup = async (req, res) => {
     const { email, username, password } = req.body;
     const exists = await User.findOne({ email });
     if (exists) {
-      return res.json({ error: "email already exists" });
+      return res.json({ success: false, error: "email already exists" });
     }
-    const user = await User.create({ email, password, username });
-    const token = createToken(user._id);
-    res.json({ token, user });
+    await User.create({ email, password, username });
+    res.json({ success: true });
   } catch (e) {
-    res.json({ error: "signup failed" });
+    res.json({ success: false, error: "signup failed" });
   }
 };
 

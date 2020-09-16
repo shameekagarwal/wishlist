@@ -1,12 +1,22 @@
 const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
+const cors = require("cors");
 
 const { postLogin, postSignup } = require("./controllers/authController");
-const { postWish, getWishes } = require("./controllers/wishController");
+
+const {
+  postWish,
+  deleteWish,
+  getAllWishes,
+} = require("./controllers/wishController");
+
+const getWishesPublic = require("./controllers/getWishesPublic");
+
 const checkUser = require("./middlewares/checkUser");
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -21,7 +31,11 @@ mongoose
 
 app.post("/auth/signup", postSignup);
 app.post("/auth/login", postLogin);
+
 app.post("/api/wish", checkUser, postWish);
-app.get("/api/wish", checkUser, getWishes);
+app.delete("/api/wish", checkUser, deleteWish);
+app.get("/api/wishes", checkUser, getAllWishes);
+
+app.get("/api/wishespublic/:id", getWishesPublic);
 
 app.listen(process.env.PORT, console.log("http://localhost:3000"));
