@@ -2,15 +2,19 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 const checkUser = (req, res, next) => {
-  const token = req.body.jwt;
-  if (token) {
+  try {
+    const token = req.headers["x-access-token"];
+    if (!token) {
+      return res.json({ error: "token missing" });
+    }
     jwt.verify(token, process.env.JWTSECRET, async (err, decodedtoken) => {
-      if (!err) {
-        req.body.user = await User.findById(decodedtoken.id);
-        next();
+      if (err) {
+        return res.json({ error: "token tampered" });
       }
+      req.body.user = await User.findById(decodedtoken.id);
+      next();
     });
-  } else {
+  } catch (e) {
     res.json({ error: "authentication failed" });
   }
 };

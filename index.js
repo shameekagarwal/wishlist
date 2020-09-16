@@ -19,9 +19,9 @@ mongoose
   .then((r) => console.log("connected to atlas"))
   .catch((e) => console.log("error in connecting to atlas"));
 
-app.post("/signup", postSignup);
-app.post("/login", postLogin);
-app.post("/wish", checkUser, postWish);
-app.get("/wish", checkUser, getWishes);
+app.post("/auth/signup", postSignup);
+app.post("/auth/login", postLogin);
+app.post("/api/wish", checkUser, postWish);
+app.get("/api/wish", checkUser, getWishes);
 
 app.listen(process.env.PORT, console.log("http://localhost:3000"));
