@@ -36,6 +36,6 @@ app.post("/api/wish", checkUser, postWish);
 app.delete("/api/wish", checkUser, deleteWish);
 app.get("/api/wishes", checkUser, getAllWishes);
 
-app.get("/api/wishespublic/:id", getWishesPublic);
+app.get("/api/sharedwishlist/:id", getWishesPublic);
 
 app.listen(process.env.PORT, console.log("http://localhost:3000"));

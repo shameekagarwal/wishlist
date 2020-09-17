@@ -3,20 +3,21 @@ const postWish = async (req, res) => {
     const { title, description, user } = req.body;
     user.wishlist.push({ title, description });
     await user.save();
-    res.json({ success: true });
+    res.json({ wish: user.wishlist[user.wishlist.length - 1] });
   } catch (e) {
-    res.json({ success: false, error: "adding wish failed" });
+    res.status(500).json({ error: "Adding wish failed." });
   }
 };
 
 const deleteWish = async (req, res) => {
   try {
-    const { user, wishid } = req.body;
+    const { user } = req.body;
+    const { wishid } = req.query;
     user.wishlist = user.wishlist.filter((wish) => wish._id != wishid);
     await user.save();
     res.json({ success: true });
   } catch (e) {
-    res.json({ success: false, error: "deleting wish failed" });
+    res.status(500).json({ success: false, error: "Deleting wish failed." });
   }
 };
 
@@ -24,9 +25,9 @@ const getAllWishes = async (req, res) => {
   try {
     const { user } = req.body;
     const { wishlist } = user;
-    res.json({ success: true, wishes: wishlist });
+    res.json({wishes: wishlist });
   } catch (e) {
-    res.json({ success: false, error: "getting wishlist(private) failed" });
+    res.status(500).json({ error: "Internal Server Error." });
   }
 };
 

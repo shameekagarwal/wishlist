@@ -5,11 +5,11 @@ const getWishesPublic = async (req, res) => {
     const shareablelink = req.params.id;
     const user = await User.findOne({ shareablelink });
     if (!user) {
-      return res.json({ success: false, error: "shareable link doesnt exist" });
+      return res.status(404).json({error: "Invalid Link" });
     }
-    res.json({ success: true, wishlist: user.wishlist });
+    res.json({ name: user.name, wishes: user.wishlist });
   } catch (e) {
-    res.json({ success: false, error: "getting wishlist(public) failed" });
+    res.status(500).json({ error: "Server Error" });
   }
 };
 
