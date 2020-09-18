@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const crypto = require("crypto");
 const sendEmail = require("../emails/emailOptions");
+require("dotenv").config();
 
 const resetPassword = async (req, res) => {
   try {
@@ -43,6 +44,7 @@ const resetPasswordLink = async (req, res) => {
     user.passresetlink = user._id + crypto.randomBytes(20).toString("hex");
     user.passresettime = Date.now();
     await user.save();
+    const base_url = 'https://wishlist20.herokuapp.com';
     await sendEmail(
       email,
       "Reset Password",
@@ -56,7 +58,7 @@ const resetPasswordLink = async (req, res) => {
 				  <hr />
 				  <h3>
 					  We believe you requested for a password change.<br />
-					  <b><a style="color: white; text-decoration: none" href="http://localhost:8080/changePassword/${user.passresetlink}" >CLICK HERE</a></b> to
+					  <b><a style="color: white; text-decoration: none" href="${base_url}/changePassword/${user.passresetlink}" >CLICK HERE</a></b> to
 					  reset your password.<br />
             Please note that the link expires in an hour.
 				  </h3>
@@ -69,8 +71,7 @@ const resetPasswordLink = async (req, res) => {
     );
     res.json({ success: true });
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ error: "Error reseting passwordlink" });
+    res.status(500).json({ error: "Error sending password reset email" });
   }
 };
 

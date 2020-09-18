@@ -9,7 +9,6 @@ const postWish = async (req, res) => {
     await wishes.save();
     res.json({ wish: wishes[wishes.length - 1] });
   } catch (e) {
-    console.log(e);
     res.status(500).json({ error: "Adding wish failed." });
   }
 };

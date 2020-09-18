@@ -32,8 +32,8 @@ mongoose
     useUnifiedTopology: true,
     useCreateIndex: true,
   })
-  .then((r) => console.log("connected to atlas"))
-  .catch((e) => console.log("error in connecting to atlas"));
+  .then((r) => console.log("Connected to Atlas"))
+  .catch((e) => console.log("Error in connecting to Atlas"));
 
 app.post("/auth/signup", postSignup);
 app.post("/auth/login", postLogin);
@@ -48,4 +48,11 @@ app.post("/api/passwordEmail", resetPasswordLink);
 app.post("/api/resetShareLink", checkUser, resetShareableLink);
 app.post("/api/changePassword", resetPassword);
 
-app.listen(process.env.PORT, console.log("http://localhost:3000"));
+// Production setting
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(__dirname + '/public/'));
+  app.get('*', (req, res) => res.sendFile(__dirname + '/public/index.html'));
+}
+
+app.listen(process.env.PORT || 3000, console.log("Listening on port: ", process.env.PORT));
