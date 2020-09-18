@@ -44,8 +44,8 @@ app.get("/api/wishes", checkUser, getAllWishes);
 
 app.get("/api/sharedwishlist/:id", getWishesPublic);
 
-app.post("/reset/passwordlink", resetPasswordLink);
-app.post("/reset/shareablelink", checkUser, resetShareableLink);
-app.post("/reset/password/:link", resetPassword);
+app.post("/api/passwordEmail", resetPasswordLink);
+app.post("/api/resetShareLink", checkUser, resetShareableLink);
+app.post("/api/changePassword", resetPassword);
 
 app.listen(process.env.PORT, console.log("http://localhost:3000"));

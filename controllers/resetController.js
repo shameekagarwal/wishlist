@@ -4,7 +4,7 @@ const sendEmail = require("../emails/emailOptions");
 
 const resetPassword = async (req, res) => {
   try {
-    const passresetlink = req.params.link;
+    const { passresetlink } = req.body;
     const user = await User.findOne({ passresetlink });
     if (!user) {
       return res.status(401).json({ error: "Not requested for password" });
@@ -27,7 +27,7 @@ const resetShareableLink = async (req, res) => {
     const { user } = req.body;
     user.shareablelink = user._id + crypto.randomBytes(20).toString("hex");
     await user.save();
-    res.json({ success: true });
+    res.json({ link: user.shareablelink});
   } catch (e) {
     res.status(500).json({ error: "Error reseting shareablelink" });
   }
@@ -52,11 +52,11 @@ const resetPasswordLink = async (req, res) => {
 	  
 		  <div>
 			  <div style="background-color: #5d2299;color: white; margin: 5px; padding: 5px; font-family: Arial; text-align: center;">
-				  <h1 style=>oursitename</h1>
+				  <h1 style=>Wish List</h1>
 				  <hr />
 				  <h3>
 					  We believe you requested for a password change.<br />
-					  <b><a style="color: white; text-decoration: none" href=sitekanaam/${user.passresetlink} >CLICK HERE</a></b> to
+					  <b><a style="color: white; text-decoration: none" href="http://localhost:8080/changePassword/${user.passresetlink}" >CLICK HERE</a></b> to
 					  reset your password.<br />
             Please note that the link expires in an hour.
 				  </h3>
@@ -69,6 +69,7 @@ const resetPasswordLink = async (req, res) => {
     );
     res.json({ success: true });
   } catch (e) {
+    console.log(e);
     res.status(500).json({ error: "Error reseting passwordlink" });
   }
 };

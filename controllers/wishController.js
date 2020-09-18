@@ -2,7 +2,8 @@ const Wish = require("../models/Wish");
 
 const postWish = async (req, res) => {
   try {
-    const { title, description, user, link, image } = req.body;
+    const { wish, user } = req.body;
+    const { title, description, link, image } = wish;
     let wishes = await Wish.findOne({ owner: user._id });
     wishes.wishList.push({ title, description, link, image });
     await wishes.save();
