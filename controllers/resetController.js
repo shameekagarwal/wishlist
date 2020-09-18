@@ -62,8 +62,9 @@ const resetPasswordLink = async (req, res) => {
 				  <hr />
 				  <h3>
 					  We believe you requested for a password change.<br />
-					  <b><a style="color: white; text-decoration: none" href=sitekanaam/${user.passresetlink} >Click here</a></b> to
-					  reset your password.
+					  <b><a style="color: white; text-decoration: none" href=sitekanaam/${user.passresetlink} >CLICK HERE</a></b> to
+					  reset your password.<br />
+            Please note that the link expires in an hour.
 				  </h3>
 				  <i><p>If it wasn't you, please ignore the message above.</p></i>
 			  </div>
