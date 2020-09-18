@@ -13,11 +13,13 @@ const userSchema = new mongoose.Schema({
     },
   ],
   shareablelink: String,
+  passresetlink: String,
+  passresettime: Date,
 });
 
 userSchema.pre("save", async function (next) {
   const user = this;
-  if (!user.isModified('password')) return next();
+  if (!user.isModified("password")) return next();
   const salt = await bcrypt.genSalt();
   user.password = await bcrypt.hash(user.password, salt);
   if (user.shareablelink) return next();

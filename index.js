@@ -6,6 +6,12 @@ const cors = require("cors");
 const { postLogin, postSignup } = require("./controllers/authController");
 
 const {
+  resetPasswordLink,
+  resetShareableLink,
+  resetPassword,
+} = require("./controllers/resetController");
+
+const {
   postWish,
   deleteWish,
   getAllWishes,
@@ -37,5 +43,9 @@ app.delete("/api/wish", checkUser, deleteWish);
 app.get("/api/wishes", checkUser, getAllWishes);
 
 app.get("/api/sharedwishlist/:id", getWishesPublic);
+
+app.post("/reset/passwordlink", resetPasswordLink);
+app.post("/reset/shareablelink", checkUser, resetShareableLink);
+app.post("/reset/password/:link", resetPassword);
 
 app.listen(process.env.PORT, console.log("http://localhost:3000"));

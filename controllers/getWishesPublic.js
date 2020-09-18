@@ -5,7 +5,7 @@ const getWishesPublic = async (req, res) => {
     const shareablelink = req.params.id;
     const user = await User.findOne({ shareablelink });
     if (!user) {
-      return res.status(404).json({error: "Invalid Link" });
+      return res.status(404).json({ error: "Invalid Link" });
     }
     res.json({ name: user.name, wishes: user.wishlist });
   } catch (e) {

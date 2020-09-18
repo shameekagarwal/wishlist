@@ -25,7 +25,7 @@ const getAllWishes = async (req, res) => {
   try {
     const { user } = req.body;
     const { wishlist } = user;
-    res.json({wishes: wishlist });
+    res.json({ wishes: wishlist });
   } catch (e) {
     res.status(500).json({ error: "Internal Server Error." });
   }

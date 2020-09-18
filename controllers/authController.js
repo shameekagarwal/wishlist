@@ -12,11 +12,15 @@ const postLogin = async (req, res) => {
     const { email, password } = req.body;
     const exists = await User.findOne({ email });
     if (!exists) {
-      return res.status(401).json({ success: false, error: "Incorrect username or password" });
+      return res
+        .status(401)
+        .json({ success: false, error: "Incorrect username or password" });
     }
     const user = await User.login(email, password);
     if (!user) {
-      return res.status(401).json({ success: false, error: "Incorrect username or password." });
+      return res
+        .status(401)
+        .json({ success: false, error: "Incorrect username or password." });
     }
     const token = createToken(user._id);
     res.json({ success: true, token, user });
@@ -30,7 +34,10 @@ const postSignup = async (req, res) => {
     const { email, name, password } = req.body;
     const exists = await User.findOne({ email });
     if (exists) {
-      return res.status(400).json({ success: false, error: "An account with this email already exists." });
+      return res.status(400).json({
+        success: false,
+        error: "An account with this email already exists.",
+      });
     }
     await User.create({ email, password, name });
     res.json({ success: true });
