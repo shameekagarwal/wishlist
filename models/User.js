@@ -6,12 +6,6 @@ const userSchema = new mongoose.Schema({
   email: String,
   password: String,
   name: String,
-  wishlist: [
-    {
-      title: String,
-      description: String,
-    },
-  ],
   shareablelink: String,
   passresetlink: String,
   passresettime: Date,

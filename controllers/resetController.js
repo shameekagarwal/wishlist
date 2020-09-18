@@ -7,20 +7,18 @@ const resetPassword = async (req, res) => {
     const passresetlink = req.params.link;
     const user = await User.findOne({ passresetlink });
     if (!user) {
-      return res
-        .status(401)
-        .json({ success: false, error: "Not requested for password" });
+      return res.status(401).json({ error: "Not requested for password" });
     }
     const elapsed = Date.now() - user.passresettime;
     if (elapsed > 3600000) {
-      return res.status(500).json({ success: false, error: "Expired link" });
+      return res.status(500).json({ error: "Expired link" });
     }
     const { newpassword } = req.body;
     user.password = newpassword;
     await user.save();
     res.json({ success: true });
   } catch (e) {
-    res.status(500).json({ success: false, error: "Error reseting password" });
+    res.status(500).json({ error: "Error reseting password" });
   }
 };
 
@@ -31,9 +29,7 @@ const resetShareableLink = async (req, res) => {
     await user.save();
     res.json({ success: true });
   } catch (e) {
-    res
-      .status(500)
-      .json({ success: false, error: "Error reseting shareablelink" });
+    res.status(500).json({ error: "Error reseting shareablelink" });
   }
 };
 
@@ -42,9 +38,7 @@ const resetPasswordLink = async (req, res) => {
     const { email } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      return res
-        .status(401)
-        .json({ success: false, error: "Incorrect username" });
+      return res.status(401).json({ error: "Incorrect username" });
     }
     user.passresetlink = user._id + crypto.randomBytes(20).toString("hex");
     user.passresettime = Date.now();
@@ -75,9 +69,7 @@ const resetPasswordLink = async (req, res) => {
     );
     res.json({ success: true });
   } catch (e) {
-    res
-      .status(500)
-      .json({ success: false, error: "Error reseting passwordlink" });
+    res.status(500).json({ error: "Error reseting passwordlink" });
   }
 };
 

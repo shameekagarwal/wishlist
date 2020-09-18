@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const Wish = require("../models/Wish");
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWTSECRET, {
@@ -12,20 +13,16 @@ const postLogin = async (req, res) => {
     const { email, password } = req.body;
     const exists = await User.findOne({ email });
     if (!exists) {
-      return res
-        .status(401)
-        .json({ success: false, error: "Incorrect username or password" });
+      return res.status(401).json({ error: "Incorrect username or password" });
     }
     const user = await User.login(email, password);
     if (!user) {
-      return res
-        .status(401)
-        .json({ success: false, error: "Incorrect username or password." });
+      return res.status(401).json({ error: "Incorrect username or password." });
     }
     const token = createToken(user._id);
-    res.json({ success: true, token, user });
+    res.json({ token, user });
   } catch (e) {
-    res.status(500).json({ success: false, error: "login failed" });
+    res.status(500).json({ error: "login failed" });
   }
 };
 
@@ -34,15 +31,15 @@ const postSignup = async (req, res) => {
     const { email, name, password } = req.body;
     const exists = await User.findOne({ email });
     if (exists) {
-      return res.status(400).json({
-        success: false,
-        error: "An account with this email already exists.",
-      });
+      return res
+        .status(400)
+        .json({ error: "An account with this email already exists." });
     }
-    await User.create({ email, password, name });
+    const user = await User.create({ email, password, name });
+    await Wish.create({ owner: user._id });
     res.json({ success: true });
   } catch (e) {
-    res.status(500).json({ success: false, error: "Server error." });
+    res.status(500).json({ error: "Server error." });
   }
 };
 
